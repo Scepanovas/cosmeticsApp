@@ -1,0 +1,78 @@
+{% include 'header.html' %}
+{% load static %}
+<div ng-controller="Top15Ctrl"
+     ng-init="init()"
+     class="content_wrapper">
+  <div class="container_12">
+    <div class="grid_4">
+      <div class="content">
+        <div style="padding-top: 10px;" class="block1">
+          <h4 class="topHeader">TOP 15 produktai</h4>
+          <div class="clear"></div></br>
+          <div ng-show="productsExist" class="ng-show" class="block1" ng-cloak>
+            <ul>
+              <li class="top15list" ng-repeat="product in products">
+                <div>{[{$index + 1}]}.</div>
+                <div><img style="width:50px; margin-left:0px;" src="{% get_media_prefix %}{[{ product.ratedOnProduct__thumbnail }]}"/></div>
+                <div style="width:120px; overflow:hidden; text-overflow:ellipsis;"><a href="/produktas/{[{product.ratedOnProduct_id}]}">{[{ product.ratedOnProduct__name }]}</a></div>
+                <div>{[{ product.result }]}</div>
+              </li>
+              <div class="clear"></div>
+            </ul>
+            <div class="clear"></div>
+          </div>
+          <div ng-show="!productsExist" class="ng-show" class="block1" ng-cloak>
+            <h4>Nėra duomenų</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid_4">
+      <div class="content">
+        <div style="padding-top: 10px;" class="block1">
+          <h4 class="topHeader">TOP 15 prekės ženklai</h4>
+          <div class="clear"></div></br>
+          <div ng-show="brandsExist" class="ng-show" class="block1" ng-cloak>
+            <ul>
+              <li class="top15list" ng-repeat="brand in brands">
+                <div>{[{$index + 1}]}.</div>
+                <div><img style="width:50px; margin-left:0px;" src="{% get_media_prefix %}{[{ brand.ratedOnBrand__thumbnail }]}"/></div>
+                <div style="width:120px; overflow:hidden; text-overflow:ellipsis;"><a href="/profilis/{[{brand.ratedOnBrand_id}]}">{[{ brand.ratedOnBrand__brandName }]}</a></div>
+                <div>{[{ brand.result }]}</div>
+              </li>
+              <div class="clear"></div>
+            </ul>
+            <div class="clear"></div>
+          </div>
+          <div ng-show="!brandsExist" class="ng-show" class="block1" ng-cloak>
+            <h4>Nėra duomenų</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="grid_4">
+      <div class="content">
+        <div style="padding-top: 10px;" class="block1">
+          <h4 class="topHeader">TOP 15 naudotojai</h4>
+          <div class="clear"></div></br>
+          <div ng-show="usersExist" class="ng-show" class="block1" ng-cloak>
+            <ul>
+              <li class="top15list" ng-repeat="user in users">
+                <div>{[{$index + 1}]}.</div>
+                <div><img style="width:50px; margin-left:0px;" src="{% get_media_prefix %}{[{ user.ratedOnBrand__thumbnail }]}"/></div>
+                <div style="width:120px; overflow:hidden; text-overflow:ellipsis;"><a href="/profilis/{[{user.ratedOnBrand_id}]}">{[{ user.ratedOnBrand__username }]}</a></div>
+                <div>{[{ user.result }]}</div>
+              </li>
+              <div class="clear"></div>
+            </ul>
+            <div class="clear"></div>
+          </div>
+          <div ng-show="!usersExist" class="ng-show" class="block1" ng-cloak>
+            <h4>Nėra duomenų</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% include 'footer.html' %}

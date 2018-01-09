@@ -1,0 +1,65 @@
+{% include 'header.html' %}
+<div ng-controller="CreateProductCtrl"
+     ng-init="init('/api/ingredients/', '?search=', '/api/products/?search=')"
+     class="content_wrapper">
+  <div class="container_12">
+    <div class="grid_9">
+      <div class="content">
+        <div ng-cloak class="block1">
+          {% if user.isBrand %}
+          <h3>Naujas produktas</h3>
+          <ul ng-clock>
+            <li><img id="imagePreview" src="#" alt=""></li>
+            <li><input file-model="myFile" type="file" id="files" class="ng-hide"/><li>
+            <li><label class="pointer" for="files">Pridėti produkto logotipą > *</label></li>
+            <li class="red">{[{ errors.image }]}</li>
+            <li><input ng-model="newProductModel.name" class="registerForm" maxlength="128" name="name" type="text" placeholder="Produkto pavadinimas">*</li>
+            <li class="red">{[{ errors.name }]}</li>
+            <li><textarea ng-model="newProductModel.tagLine" class="registerForm" rows="10" placeholder="Trumpas produkto aprašymas"></textarea>*</li>
+            <li class="red">{[{ errors.tagLine }]}</li>
+            <li><h4>Pasirinkti ingredientai:</h4></li>
+            <li class="red">{[{ errors.ingredients }]}</li>
+            <li ng-repeat="attachedIngredient in attachedIngredients">
+              {[{ attachedIngredient.name }]}
+              <img ng-click="remIngredient(attachedIngredient.pk)" class="pointer miniBtn" src="/media/x.png">
+            </li>
+            <li>
+              <h4>Pasirinkite ingredientus iš sąrašo:</h4>
+              <input class="searchInput" placeholder="Pagal pavadinimą, nuorodos, CAS, EC numerius" type="search" ng-model="searchVar"></input>
+              <button ng-click="search(searchVar)">Ieškoti</button>
+              </br><a ng-cloak>Rasta: {[{ searchResults.count }]}</a>
+              <div ng-hide="recordsExist" class="ng-hide">
+                <a href="" ng-click="anotherPage(pageNo-1)" class="btn">< Ankstesnis</a>
+                <a href="" ng-cloak ng-repeat="page in pageList track by $index"  ng-click="anotherPage(page)" class="btn">{[{page}]}</a>
+                <a href="" ng-click="anotherPage(pageNo+1)" class="btn">Sekantis ></a>
+              </div>
+              </br>
+              <div ng-hide="recordsExist" class="ng-hide" class="block1" ng-cloak>
+                <div>
+                  <ul class="list" ng-cloak>
+                    <li ng-repeat="ingredient in searchResults.results">
+                      {[{ ingredient.referenceNumber }]} {[{ ingredient.name }]}
+                      <img ng-click="addIngredient(ingredient.pk, ingredient.name)" class="pointer miniBtn" src="/media/plus.png">
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div ng-hide="!recordsExist" class="ng-hide" class="block1" ng-cloak>
+                <h4>Pagal paieškos įvestį duomenų nerasta.. </h4>
+              </div>
+              <div class="clear"></div>
+            </li>
+            <li><a ng-click="createProduct({{ user.pk }})" class="btn">Kurti</a></li>
+          </ul>
+          {% else %}
+          <h4>Produktus kurti gali tik naudotojai turintys prekės ženklo sąsają</h4>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="grid_3">
+      <h1><a href="{% url 'frontendApp:top15' %}"><img src="../static/images/logo.png" alt=""></a></h1>
+    </div>
+  </div>
+</div>
+{% include 'footer.html' %}

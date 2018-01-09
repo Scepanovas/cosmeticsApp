@@ -1,0 +1,158 @@
+{% include 'header.html' %}
+<div ng-controller="SkinTestCtrl"
+     ng-init="init('/api/brandDetails/', {{ user.pk }})"
+     class="content_wrapper">
+  <div class="container_12">
+    <div class="grid_9">
+      <div class="content">
+        {% if user.is_authenticated and not user.isBrand %}
+        <div ng-cloak class="block1"></br>
+          <h4>Jūsų odos tipas: {[{ currentSkinType }]}</h4>
+          <a class="btn" ng-cloak href="" ng-click="showDetails = ! showDetails; changeSign(showDetails, 'sign')">{[{ takeTestLbl }]}:
+            <c id="sign">+<c>
+          </a>
+          <div class="clear"></div></br>
+          <ul ng-show="showDetails">
+            <li>
+              <h4>Koks jūsų amžius?</h4>
+              <ul>
+                <li><input id="age1" type="radio" name="age" ng-model='answers.age' value="j1"/><label class = "full pointer" for="age1"> Mažiau, nei 18</label></li>
+                <li><input id="age2" type="radio" name="age" ng-model='answers.age' value="j2"/><label class = "full pointer" for="age2"> 19-29</label></li>
+                <li><input id="age3" type="radio" name="age" ng-model='answers.age' value="f"/><label class = "full pointer" for="age3"> 30-39</label></li>
+                <li><input id="age4" type="radio" name="age" ng-model='answers.age' value="o1"/><label class = "full pointer" for="age4"> 40-49</label></li>
+                <li><input id="age5" type="radio" name="age" ng-model='answers.age' value="o2"/><label class = "full pointer" for="age5"> 50-59</label></li>
+                <li><input id="age6" type="radio" name="age" ng-model='answers.age' value="o3"/><label class = "full pointer" for="age6"> Daugiau, nei 60</label></li>
+              </ul>
+            </li>
+            <li class="red">{[{ errors.age }]}</li></br></br>
+            <li>
+              <h4>Kiek vandens vidutiniškai suvartojate per parą?</h4>
+              <ul>
+                <li><input id="water1" type="radio" name="water" ng-model='answers.water' value="sp"/><label class = "full pointer" for="water1"> Mažiau, nei 0,5l</label></li>
+                <li><input id="water2" type="radio" name="water" ng-model='answers.water' value="s"/><label class = "full pointer" for="water2"> 1-2l</label></li>
+                <li><input id="water3" type="radio" name="water" ng-model='answers.water' value="n"/><label class = "full pointer" for="water3"> Daugiau, nei 2l</label></li>
+              </ul>
+            </li>
+            <li class="red">{[{ errors.water }]}</li></br></br>
+            <li>
+              <h4>Kas geriausiai apibūdina Jūsų aplinką?</h4>
+              <ul>
+                <li><input id="surounding1" type="radio" name="surounding" ng-model='answers.surounding' value="nmr"><label class = "full pointer" for="surounding1"> Oras yra drėgnas</label></li>
+                <li><input id="surounding2" type="radio" name="surounding" ng-model='answers.surounding' value="su"><label class = "full pointer" for="surounding2"> Oras yra sausas</label></li>
+                <li><input id="surounding3" type="radio" name="surounding" ng-model='answers.surounding' value="nm"><label class = "full pointer" for="surounding3"> Oras yra nei drėgnas, nei sausas</label></li>
+              </ul>
+            </li>
+            <li class="red">{[{ errors.surounding }]}</li></br></br>
+            <li>
+              <h4>Kiek valandų per parą miegate?</h4>
+              <ul>
+                <li><input id="hours1" type="radio" name="hours" ng-model='answers.hours' value="p1"><label class = "full pointer" for="hours1"> 4</label></li>
+                <li><input id="hours2" type="radio" name="hours" ng-model='answers.hours' value="p2"><label class = "full pointer" for="hours2"> 5</label></li>
+                <li><input id="hours3" type="radio" name="hours" ng-model='answers.hours' value="p3"><label class = "full pointer" for="hours3"> 6</label></li>
+                <li><input id="hours4" type="radio" name="hours" ng-model='answers.hours' value="f1"><label class = "full pointer" for="hours4"> 7</label></li>
+                <li><input id="hours5" type="radio" name="hours" ng-model='answers.hours' value="f2"><label class = "full pointer" for="hours5"> 8</label></li>
+                <li><input id="hours6" type="radio" name="hours" ng-model='answers.hours' value="f3"><label class = "full pointer" for="hours6"> 9</label></li>
+                <li><input id="hours7" type="radio" name="hours" ng-model='answers.hours' value="f4"><label class = "full pointer" for="hours7"> 10</label></li>
+              </ul>
+            </li>
+            <li class="red">{[{ errors.hours }]}</li></br></br>
+            <li>
+              <h4>Kaip dažnai naudojate kremą nuo ultravioletinių saulės spindulių?</h4>
+              <ul>
+                <li><input id="uv1" type="radio" name="uv" ng-model='answers.uv' value="szu1"><label class = "full pointer" for="uv1"> Niekada</label></li>
+                <li><input id="uv2" type="radio" name="uv" ng-model='answers.uv' value="szu2"><label class = "full pointer" for="uv2"> Retai</label></li>
+                <li><input id="uv3" type="radio" name="uv" ng-model='answers.uv' value="szu3"><label class = "full pointer" for="uv3"> Kartais</label></li>
+                <li><input id="uv4" type="radio" name="uv" ng-model='answers.uv' value="f1"><label class = "full pointer" for="uv4"> Dažnai</label></li>
+                <li><input id="uv5" type="radio" name="uv" ng-model='answers.uv' value="f2"><label class = "full pointer" for="uv5"> Visada</label></li>
+              </ul>
+            </li>
+            <li class="red">{[{ errors.uv }]}</li></br></br>
+            <li>
+              <h4>Kaip dažnai keliaujate lėktuvu?</h4>
+              <ul>
+                <li><input id="plane1" type="radio" name="plane" ng-model='answers.plane' value="nr1"><label class = "full pointer" for="plane1"> Niekada</label></li>
+                <li><input id="plane2" type="radio" name="plane" ng-model='answers.plane' value="nr2"><label class = "full pointer" for="plane2"> Retai</label></li>
+                <li><input id="plane3" type="radio" name="plane" ng-model='answers.plane' value="nr3"><label class = "full pointer" for="plane3"> Kartais</label></li>
+                <li><input id="plane4" type="radio" name="plane" ng-model='answers.plane' value="s1"><label class = "full pointer" for="plane4"> Dažnai</label></li>
+                <li><input id="plane5" type="radio" name="plane" ng-model='answers.plane' value="s2"><label class = "full pointer" for="plane5"> Visada</label></li>
+              </ul>
+            </li>
+            <li class="red">{[{ errors.plane }]}</li></br></br>
+            <li>
+              <h4>Kas geriausiai apibūdina Jūsų odą?</h4>
+              <ul>
+                <li><input id="skin1" type="radio" name="skin" ng-model='answers.skin' value="r"><label class = "full pointer" for="skin1"> Mano oda gamina aliejų visame veide arba T zonoje</label></li>
+                <li><input id="skin2" type="radio" name="skin" ng-model='answers.skin' value="rm"><label class = "full pointer" for="skin2"> Mano oda gamina aliejų visame veide arba T zonoje; gali būti odos įtampos ar sausumo jausmas, kai naudojami stiprūs spuoguotumą mažinantys produktai</label></li>
+                <li><input id="skin3" type="radio" name="skin" ng-model='answers.skin' value="n"><label class = "full pointer" for="skin3"> Mano oda nėra nei labai riebi, nei labai sausa</label></li>
+                <li><input id="skin4" type="radio" name="skin" ng-model='answers.skin' value="s1"><label class = "full pointer" for="skin4"> Mano oda yra sausa ir beveik negamina aliejaus</label></li>
+                <li><input id="skin5" type="radio" name="skin" ng-model='answers.skin' value="s2"><label class = "full pointer" for="skin5"> Mano oda labai sausa ir visiškai negamina aliejaus</label></li>
+              </ul>
+            </li>
+            <li class="red">{[{ errors.skin }]}</li></br></br>
+            <li>
+              <h4>Koks yra Nr. 1 aspektas, keliantis susirūpinimą dėl Jūsų odos?</h4>
+              <ul>
+                <li><input id="concern11" type="radio" name="concern1" ng-model='answers.concern1' value="rm"><label class = "full pointer" for="concern11"> Spuogai ar dėmės</label></li>
+                <li><input id="concern12" type="radio" name="concern1" ng-model='answers.concern1' value="bru"><label class = "full pointer" for="concern12"> Riebaluotumas</label></li>
+                <li><input id="concern13" type="radio" name="concern1" ng-model='answers.concern1' value="ou"><label class = "full pointer" for="concern13"> Tono praradimas</label></li>
+                <li><input id="concern14" type="radio" name="concern1" ng-model='answers.concern1' value="quo"><label class = "full pointer" for="concern14"> Raudonumas ar kapiliarų padidėjimas</label></li>
+                <li><input id="concern15" type="radio" name="concern1" ng-model='answers.concern1' value="u"><label class = "full pointer" for="concern15"> Jautrumas</label></li>
+                <li><input id="concern16" type="radio" name="concern1" ng-model='answers.concern1' value="sno"><label class = "full pointer" for="concern16"> Dehidratacija (oda yra tarsi įsitempusi, bet gamina aliejų)</label></li>
+                <li><input id="concern17" type="radio" name="concern1" ng-model='answers.concern1' value="s"><label class = "full pointer" for="concern17"> Sausumas (oda yra sausa arba sluoksniuota ir negamina aliejaus)</label></li>
+                <li><input id="concern18" type="radio" name="concern1" ng-model='answers.concern1' value="os"><label class = "full pointer" for="concern18"> Raukšlės</label></li>
+                <li><input id="concern19" type="radio" name="concern1" ng-model='answers.concern1' value="zsu"><label class = "full pointer" for="concern19"> Pažeidimai nuo saulės</label></li>
+                <li><input id="concern110" type="radio" name="concern1" ng-model='answers.concern1' value="brm"><label class = "full pointer" for="concern110"> Didelės poros</label></li>
+                <li><input id="concern111" type="radio" name="concern1" ng-model='answers.concern1' value="o"><label class = "full pointer" for="concern111"> Amžiaus prevencija</label></li>
+                <li><input id="concern112" type="radio" name="concern1" ng-model='answers.concern1' value="p"><label class = "full pointer" for="concern112"> Maišeliai po akimis arba pajuodę paakiai</label></li>
+                <li><input id="concern113" type="radio" name="concern1" ng-model='answers.concern1' value="brmu"><label class = "full pointer" for="concern113"> Randai nuo bėrimo</label></li>
+                <li><input id="concern114" type="radio" name="concern1" ng-model='answers.concern1' value="op"><label class = "full pointer" for="concern114"> Rudos spalvos dėmės ar išblukimas</label></li>
+              </ul>
+            </li>
+            <li class="red">{[{ errors.concern1 }]}</li></br></br>
+            <li>
+              <h4>Koks yra Nr. 2 aspektas, keliantis susirūpinimą dėl Jūsų odos?</h4>
+              <ul>
+                <li><input id="concern21" type="radio" name="concern2" ng-model='answers.concern2' value="rm"><label class = "full pointer" for="concern21"> Spuogai ar dėmės</label></li>
+                <li><input id="concern22" type="radio" name="concern2" ng-model='answers.concern2' value="bru"><label class = "full pointer" for="concern22"> Riebaluotumas</label></li>
+                <li><input id="concern23" type="radio" name="concern2" ng-model='answers.concern2' value="ou"><label class = "full pointer" for="concern23"> Tono praradimas</label></li>
+                <li><input id="concern24" type="radio" name="concern2" ng-model='answers.concern2' value="quo"><label class = "full pointer" for="concern24"> Raudonumas ar kapiliarų padidėjimas</label></li>
+                <li><input id="concern25" type="radio" name="concern2" ng-model='answers.concern2' value="u"><label class = "full pointer" for="concern25"> Jautrumas</label></li>
+                <li><input id="concern26" type="radio" name="concern2" ng-model='answers.concern2' value="sno"><label class = "full pointer" for="concern26"> Dehidratacija (oda yra tarsi įsitempusi, bet gamina aliejų)</label></li>
+                <li><input id="concern27" type="radio" name="concern2" ng-model='answers.concern2' value="s"><label class = "full pointer" for="concern27"> Sausumas (oda yra sausa arba sluoksniuota ir negamina aliejaus)</label></li>
+                <li><input id="concern28" type="radio" name="concern2" ng-model='answers.concern2' value="os"><label class = "full pointer" for="concern28"> Raukšlės</label></li>
+                <li><input id="concern29" type="radio" name="concern2" ng-model='answers.concern2' value="zsu"><label class = "full pointer" for="concern29"> Pažeidimai nuo saulės</label></li>
+                <li><input id="concern210" type="radio" name="concern2" ng-model='answers.concern2' value="brm"><label class = "full pointer" for="concern210"> Didelės poros</label></li>
+                <li><input id="concern211" type="radio" name="concern2" ng-model='answers.concern2' value="o"><label class = "full pointer" for="concern211"> Amžiaus prevencija</label></li>
+                <li><input id="concern212" type="radio" name="concern2" ng-model='answers.concern2' value="p"><label class = "full pointer" for="concern212"> Maišeliai po akimis arba pajuodę paakiai</label></li>
+                <li><input id="concern213" type="radio" name="concern2" ng-model='answers.concern2' value="brmu"><label class = "full pointer" for="concern213"> Randai nuo bėrimo</label></li>
+                <li><input id="concern214" type="radio" name="concern2" ng-model='answers.concern2' value="op"><label class = "full pointer" for="concern214"> Rudos spalvos dėmės ar išblukimas</label></li>
+              </ul>
+            </li>
+            <li class="red">{[{ errors.concern2 }]}</li></br></br>
+            <li>
+              <h4>Kaip dažnai Jus beria?</h4>
+              <ul>
+                <li><input id="rash1" type="radio" name="rash" ng-model='answers.rash' value="rmubbbb"><label class = "full pointer" for="rash1"> Nuolatos</label></li>
+                <li><input id="rash2" type="radio" name="rash" ng-model='answers.rash' value="rmbbb"><label class = "full pointer" for="rash2"> Dažnai</label></li>
+                <li><input id="rash3" type="radio" name="rash" ng-model='answers.rash' value="rmbb"><label class = "full pointer" for="rash3"> Kartais</label></li>
+                <li><input id="rash4" type="radio" name="rash" ng-model='answers.rash' value="rmb"><label class = "full pointer" for="rash4"> Retai</label></li>
+              </ul>
+            </li>
+            <li class="red">{[{ errors.rash }]}</li></br>
+            <li>
+              <a ng-click="saveTestResults()" class="btn">Išsaugoti testo rezultatus</a>
+            </li>
+          </ul>
+          <div class="clear"></div></br>
+        </div>
+        {% else %}
+          <h4>Testas skirtas registruotiems naudotojams (ne prekės ženklams)</h4>
+        {% endif %}
+      </div>
+    </div>
+    <div class="grid_3">
+      <h1><a href="{% url 'frontendApp:top15' %}"><img src="../static/images/logo.png" alt=""></a></h1>
+    </div>
+  </div>
+</div>
+{% include 'footer.html' %}

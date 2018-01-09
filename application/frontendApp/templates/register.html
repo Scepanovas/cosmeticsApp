@@ -1,0 +1,39 @@
+{% include 'header.html' %}
+<div ng-controller="RegisterCtrl"
+     ng-init="init()"
+     class="content_wrapper">
+  <div class="container_12">
+    <div class="grid_9">
+      <div class="content">
+        <div class="block1">
+          <h3>Registracija</h3>
+          <ul ng-clock>
+            <li><img id="imagePreview" src="#" alt=""></li>
+            <li><input file-model="myFile" type="file" id="files" class="ng-hide"/><li>
+            <li><label class="pointer" for="files">Pridėti nuotrauką/ logo > *</label></li>
+            <li class="red">{[{ errors.image }]}</li>
+            <li><input ng-model="registerModel.username"   class="registerForm" maxlength="128" name="username" type="text" placeholder="Slapyvardis">*</li>
+            <li class="red">{[{ errors.username }]}</li>
+            <li><input ng-model="registerModel.password"   class="registerForm" name="password" type="password" placeholder="Slaptažodis">*</li>
+            <li class="red">{[{ errors.password }]}</li>
+            <li><input ng-model="registerModel.email"      class="registerForm" maxlength="128" name="email" type="text" placeholder="El.pašto adresas">*</li>
+            <li class="red">{[{ errors.email }]}</li>
+            <li><textarea ng-model="registerModel.tagLine" class="registerForm" rows="10" placeholder="Trumpas prisistatymas"></textarea></li>
+            Registruotis kaip "Prekės ženklas"<input type="checkbox" ng-model="registerModel.isBrand">
+            <div ng-clock ng-show="registerModel.isBrand" class="ng-show">
+              <li><input ng-model="registerModel.brandName" class="registerForm" maxlength="256" name="brandName" type="text"  placeholder="Prekės ženklo pavadinimas">*</li>
+              <li class="red">{[{ errors.brandName }]}</li>
+              <li><input ng-model="registerModel.country"   class="registerForm" maxlength="64"  name="country"   type="text"  placeholder="Šalis"></li>
+              <li><input ng-model="registerModel.webPage"   class="registerForm" maxlength="128" name="webPage"   type="text" placeholder="Internetinis puslapis"></li>
+            </div>
+            <li><a ng-click="register()" class="btn">Registruotis</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="grid_3">
+      <h1><a href="{% url 'frontendApp:top15' %}"><img src="../static/images/logo.png" alt=""></a></h1>
+    </div>
+  </div>
+</div>
+{% include 'footer.html' %}

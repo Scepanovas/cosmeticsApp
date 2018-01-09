@@ -1,0 +1,168 @@
+{% include 'header.html' %}
+<div ng-controller="ViewProductCtrl"
+     ng-init="init({{ user.pk }}, '/api/product/')"
+     class="content_wrapper">
+  <div class="container_12">
+    <div class="grid_9">
+      <div class="content">
+        <div class="block1" ng-cloak ng-if="productExist"></br>
+          <div class="grid_5 alpha">
+            <h3 ng-cloak>{[{ currentAvgRating }]}</h3>
+          </div>
+          {% if user.is_authenticated %}
+          <div class="grid_3 omega">
+            <fieldset class="rating">
+              <input type="radio" id="star5" name="rating" value="5" ng-model='currentRating' ng-change="rate(5)"/><label class = "full pointer" for="star5" ></label>
+              <input type="radio" id="star4" name="rating" value="4" ng-model='currentRating' ng-change="rate(4)"/><label class = "full pointer" for="star4" ></label>
+              <input type="radio" id="star3" name="rating" value="3" ng-model='currentRating' ng-change="rate(3)"/><label class = "full pointer" for="star3" ></label>
+              <input type="radio" id="star2" name="rating" value="2" ng-model='currentRating' ng-change="rate(2)"/><label class = "full pointer" for="star2" ></label>
+              <input type="radio" id="star1" name="rating" value="1" ng-model='currentRating' ng-change="rate(1)"/><label class = "full pointer" for="star1" ></label>
+            </fieldset>
+          </div>
+          {% endif %}
+          <div class="clear"></div>
+          {% if not user.isBrand and user.isTested %}
+          <div ng-hide="suggestedListEmpty && notSuggestedListEmpt">
+            <h3>Rekomendacijos:</h3>
+            <h4>Rekomenduojama jums:</h4>
+            <ul ng-hide="suggestedListEmpty">
+              <li ng-repeat="suggested in suggestedList">{[{ suggested.text }]}</li>
+            </ul>
+            <h4>Nerekomenduojama jums:</h4>
+            <ul ng-hide="notSuggestedListEmpty">
+              <li ng-repeat="notSuggested in notSuggestedList">{[{ notSuggested.text }]}</li>
+            </ul>
+          </div>
+          {% endif %}
+          <h3>Produktas: {[{ productDetails.name }]}</h3>
+          <ul>
+            <li><img id="imagePreview" src="{[{ productDetails.thumbnail }]}"></img></li>
+            <li>Prekės ženklas: <a href="/profilis/{[{ productDetails.brand.pk }]}">{[{ productDetails.brand.brandName }]}</a></li>
+            <li>Prekės ženklo tinklavietė: <a href="{[{ officialUrl }]}" target="_blank">{[{ productDetails.brand.webPage }]}</a></li>
+            <li ng-show="!tagLineEditMode" class="ng-show">Aprašymas: {[{ productDetails.tagLine }]}
+              <img ng-show="editable" ng-click="editTagLine(true, newTagLine, productDetails.pk)" class="pointer miniBtn ng-show" src="/media/edit.svg"></img>
+            </li>
+            <li ng-show="tagLineEditMode" class="ng-show">
+              <textarea ng-model="newTagLine" value="{[{ productDetails.tagLine }]}" class="registerForm" rows="10" placeholder="Trumpas prisistatymas"></textarea>
+              <img ng-show="editable" ng-click="editTagLine(false, newTagLine, productDetails.pk)" class="pointer miniBtn ng-show" src="/media/update.png"></img>
+            </li>
+          </ul>
+          </br>
+          <h3>Įspėjimai:</h3>
+          <h4 ng-if="warningsList.length == 0">Įspėjimų nėra</h4>
+          <ul>
+            <li ng-repeat="warning in warningsList">
+              {[{ warning.description }]}
+            </li>
+          </ul>
+          </br>
+          <h3>Funkcijos:</h3>
+          <ul>
+            <li ng-repeat="function in functionsList">
+              Pavadinimas: {[{ function.name }]}</br>
+              Funkcija: {[{ function.description }]}
+            </li>
+          </ul>
+          </br>
+          <h3>Ingredientai:</h3>
+          <viewMode ng-show="!ingredientsEditMode" class="ng-show">
+            <img ng-show="editable" ng-click="editIngredients(true, [], productDetails.pk, productDetails.ingredients)" class="pointer miniBtn ng-show" src="/media/edit.svg"></img>
+            </br>
+            Rizikos lygiai: 1 - žemas, 2 - vidutinis, 3 - aukštas
+            <ul class="list" ng-cloak ng-show="!ingredientsEditMode" class="ng-show">
+              <li ng-repeat="ingredient in productDetails.ingredients">
+                {[{ ingredient.name }]}</br>
+                Rizikos lygis: {[{ ingredient.riskLevel }]}
+              </li>
+            </ul>
+          </viewMode>
+          <editMode ng-show="ingredientsEditMode" class="ng-show">
+            <img ng-show="editable" ng-click="editIngredients(false, newIngredients, productDetails.pk, [])" class="pointer miniBtn ng-show" src="/media/update.png"></img>
+            </br>
+            <ul class="list" ng-cloak>
+              <li ng-repeat="attachedIngredient in attachedIngredients">
+                {[{ attachedIngredient.name }]}
+                <img ng-click="remIngredient(attachedIngredient.pk)" class="pointer miniBtn" src="/media/x.png">
+              </li>
+            </ul>
+            </br>
+            <h4>Pasirinkite ingredientus iš sąrašo:</h4>
+            <input class="searchInput" placeholder="Pagal pavadinimą, nuorodos, CAS, EC numerius" type="search" ng-model="searchVar"></input>
+            <button ng-click="search(searchVar)">Ieškoti</button>
+            </br><a ng-cloak>Rasta: {[{ searchResults.count }]}</a>
+            <div ng-hide="recordsExist" class="ng-hide">
+              <a href="" ng-click="anotherPage(pageNo-1)" class="btn">< Ankstesnis</a>
+              <a href="" ng-cloak ng-repeat="page in pageList track by $index"  ng-click="anotherPage(page)" class="btn">{[{page}]}</a>
+              <a href="" ng-click="anotherPage(pageNo+1)" class="btn">Sekantis ></a>
+            </div>
+            </br>
+            <div ng-hide="recordsExist" class="ng-hide" class="block1" ng-cloak>
+              <div>
+                <ul class="list" ng-cloak>
+                  <li ng-repeat="ingredient in searchResults.results">
+                    {[{ ingredient.referenceNumber }]} {[{ ingredient.name }]}
+                    <img ng-click="addIngredient(ingredient.pk, ingredient.name)" class="pointer miniBtn" src="/media/plus.png">
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div ng-hide="!recordsExist" class="ng-hide" class="block1" ng-cloak>
+              <h4>Pagal paieškos įvestį duomenų nerasta.. </h4>
+            </div>
+          </editMode>
+          </br>
+          <h3>Komentarai:</h3>
+          <div>
+            <a ng-cloak>Komentarų: {[{ commentsData.count }]}</a>
+            <div ng-hide="commentsExist" class="ng-show">
+              <a href="" ng-click="anotherCommentsPage(commentsPageNo-1)" class="btn">< Ankstesnis</a>
+              <a href="" ng-cloak ng-repeat="commentPage in commentsPageList track by $index"  ng-click="anotherCommentsPage(commentPage)" class="btn">{[{commentPage}]}</a>
+              <a href="" ng-click="anotherCommentsPage(commentsPageNo+1)" class="btn">Sekantis ></a>
+            </div>
+            </br>
+            <div ng-cloak ng-if="commentsData.count > 0">
+              <ul>
+                <li ng-repeat="comment in commentsData.results">
+                  <div class="grid_2">
+                    <img  style="width: 100px; float: left;" src="{[{ comment.author.thumbnail }]}">
+                    </br>
+                  </div>
+                  <div class="grid_5">
+                    <div ng-if="comment.author.isBrand">
+                      <a href="/profilis/{[{comment.author.pk}]}">{[{ comment.author.brandName }]}:</a>
+                    </div>
+                    <div ng-if="!comment.author.isBrand">
+                      <a href="/profilis/{[{comment.author.pk}]}">{[{ comment.author.username }]}:</a>
+                    </div>
+                    </br>
+                    {[{ comment.tagLine }]}
+                    <div ng-cloak ng-if="comment.youtube > ''"></br></br>
+                      <div ng-bind-html="getTrustedHTML(comment.youtube) | unsafe"></div>
+                    </div>
+                  </div>
+                  <div class="clear"></div>
+                </li></br></br>
+              </ul></br>
+            </div>
+            {% if user.is_authenticated %}
+            <ul>
+              <li><input ng-model="comment.youtube" style="width: 480px;" name="youtube" type="text" placeholder="youtube nuoroda"></li>
+              <li class="red">{[{ errors.youtube }]}</li>
+              <li><textarea ng-model="comment.tagLine" style="width: 480px;" rows="5" placeholder="Jūsų komentaras..">*</textarea></li>
+              <li class="red">{[{ errors.tagLine }]}</li>
+            </ul>
+            <a ng-click="addComment({{ user.pk }}, Id)" class="btn">Komentuoti</a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="block1" ng-cloak ng-if="!productExist"></br>
+          <h4>Toks produktas neegzistuoja.</h4>
+        </div>
+      </div>
+    </div>
+    <div class="grid_3">
+      <h1><a href="{% url 'frontendApp:top15' %}"><img src="../static/images/logo.png" alt=""></a></h1>
+    </div>
+  </div>
+</div>
+{% include 'footer.html' %}

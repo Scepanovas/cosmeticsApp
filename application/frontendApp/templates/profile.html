@@ -1,0 +1,160 @@
+{% include 'header.html' %}
+<div ng-controller="ProfileCtrl"
+     ng-init="init({{ user.pk }})"
+     class="content_wrapper">
+  <div class="container_12">
+    <div class="grid_9">
+      <div class="content">
+        <div class="block1" ng-cloak ng-if="profileExist && !profileDetails.isBrand"></br>
+          <div class="grid_5 alpha">
+            <h3 ng-cloak>{[{ currentAvgRating }]}</h3>
+          </div>
+          {% if user.is_authenticated %}
+          <div class="grid_3 omega">
+            <fieldset class="rating">
+              <input type="radio" id="star5" name="rating" value="5" ng-model='currentRating' ng-change="rate(5, false)"/><label class = "full pointer" for="star5" ></label>
+              <input type="radio" id="star4" name="rating" value="4" ng-model='currentRating' ng-change="rate(4, false)"/><label class = "full pointer" for="star4" ></label>
+              <input type="radio" id="star3" name="rating" value="3" ng-model='currentRating' ng-change="rate(3, false)"/><label class = "full pointer" for="star3" ></label>
+              <input type="radio" id="star2" name="rating" value="2" ng-model='currentRating' ng-change="rate(2, false)"/><label class = "full pointer" for="star2" ></label>
+              <input type="radio" id="star1" name="rating" value="1" ng-model='currentRating' ng-change="rate(1, false)"/><label class = "full pointer" for="star1" ></label>
+            </fieldset>
+          </div>
+          {% endif %}
+          <div class="clear"></div>
+          <ul>
+            <li><h3>{[{ profileDetails.username }]}</h3></li>
+            <li><img id="imagePreview" src="{[{ profileDetails.thumbnail }]}"></img></li>
+            <div class="clear"></div>
+            <li>el. pašto adresas: {[{ profileDetails.email }]}</li>
+            <li ng-show="!tagLineEditMode" class="ng-show">Aprašymas: {[{ profileDetails.tagLine }]}
+              <img ng-show="editable" ng-click="editTagLine(true, newTagLine, {{ user.pk }})" class="pointer miniBtn ng-show" src="/media/edit.svg"></img>
+            </li>
+            <li ng-show="tagLineEditMode" class="ng-show">
+              <textarea ng-model="newTagLine" value="{[{ profileDetails.tagLine }]}" class="registerForm" rows="10" placeholder="Trumpas prisistatymas"></textarea>
+              <img ng-show="editable" ng-click="editTagLine(false, newTagLine, {{ user.pk }})" class="pointer miniBtn ng-show" src="/media/update.png"></img>
+            </li>
+          </ul>
+        </br>
+        </div>
+        <div class="block1" ng-cloak ng-if="profileExist && profileDetails.isBrand"></br>
+          <div class="grid_5 alpha">
+            <h3 ng-cloak>{[{ currentAvgRating }]}</h3>
+          </div>
+          {% if user.is_authenticated %}
+          <div class="grid_3 omega">
+            <fieldset class="rating">
+              <input type="radio" id="star5" name="rating" value="5" ng-model='currentRating' ng-change="rate(5, true)"/><label class = "full pointer" for="star5" ></label>
+              <input type="radio" id="star4" name="rating" value="4" ng-model='currentRating' ng-change="rate(4, true)"/><label class = "full pointer" for="star4" ></label>
+              <input type="radio" id="star3" name="rating" value="3" ng-model='currentRating' ng-change="rate(3, true)"/><label class = "full pointer" for="star3" ></label>
+              <input type="radio" id="star2" name="rating" value="2" ng-model='currentRating' ng-change="rate(2, true)"/><label class = "full pointer" for="star2" ></label>
+              <input type="radio" id="star1" name="rating" value="1" ng-model='currentRating' ng-change="rate(1, true)"/><label class = "full pointer" for="star1" ></label>
+            </fieldset>
+          </div>
+          {% endif %}
+          <div class="clear"></div>
+          <ul>
+            <li><h3>{[{ profileDetails.brandName }]}</h3></li>
+            <li><img id="imagePreview" src="{[{ profileDetails.thumbnail }]}"></img></li>
+            <div class="clear"></div>
+            <li>el. pašto adresas: {[{ profileDetails.email }]}</li>
+            <li ng-show="!countryEditMode" class="ng-show">Šalis: {[{ profileDetails.country }]}
+              <img ng-show="editable" ng-click="editCountry(true, newCountry, {{ user.pk }})" class="pointer miniBtn ng-show" src="/media/edit.svg"></img>
+            </li>
+            <li ng-show="countryEditMode" class="ng-show">
+              <input ng-model="newCountry" value="{[{ profileDetails.country }]}" class="registerForm" maxlength="64" name="country" type="text" placeholder="Šalis">
+              <img ng-show="editable" ng-click="editCountry(false, newCountry, {{ user.pk }})" class="pointer miniBtn ng-show" src="/media/update.png"></img>
+            </li>
+            <li ng-show="!tagLineEditMode" class="ng-show">Aprašymas: {[{ profileDetails.tagLine }]}
+              <img ng-show="editable" ng-click="editTagLine(true, newTagLine, {{ user.pk }})" class="pointer miniBtn ng-show" src="/media/edit.svg"></img>
+            </li>
+            <li ng-show="tagLineEditMode" class="ng-show">
+              <textarea ng-model="newTagLine" value="{[{ profileDetails.tagLine }]}" class="registerForm" rows="10" placeholder="Trumpas prisistatymas"></textarea>
+              <img ng-show="editable" ng-click="editTagLine(false, newTagLine, {{ user.pk }})" class="pointer miniBtn ng-show" src="/media/update.png"></img>
+            </li>
+            <li ng-show="!webPageEditMode" class="ng-show">Tinklavietė: <a href="{[{ officialUrl }]}" target="_blank">{[{ profileDetails.webPage }]}</a>
+              <img ng-show="editable" ng-click="editWebPage(true, newWebPage, {{ user.pk }})" class="pointer miniBtn ng-show" src="/media/edit.svg"></img>
+            </li>
+            <li ng-show="webPageEditMode" class="ng-show">
+              <input ng-model="newWebPage" value="{[{ profileDetails.webPage }]}" class="registerForm" rows="10" placeholder="Tinklavietė"></input>
+              <img ng-show="editable" ng-click="editWebPage(false, newWebPage, {{ user.pk }})" class="pointer miniBtn ng-show" src="/media/update.png"></img>
+            </li>
+          </ul>
+          </br></br>
+          <h3>Produktai:</h3>
+          <ul ng-if="profileDetails.products_list.length > 0" style="list-style: none;"  ng-cloak>
+            <li class="grid_9" ng-repeat="product in profileDetails.products_list">
+              <div class="grid_2 alpha">
+                <img style="max-width: 120px;" src="{[{ product.thumbnail }]}"></img>
+              </div>
+              <div class="grid_5">
+                </br>
+                <a href="/produktas/{[{product.pk}]}">{[{ product.name }]}</a></br></br>
+                <a ng-cloak href=""
+                   ng-click="showDetails = ! showDetails; changeSign(showDetails, $index)">Aprašymas: <c id="sign{[{$index}]}">+<c>
+                   </br>
+                </a>
+                <div ng-show="showDetails">
+                  {[{ product.tagLine }]}
+                </div>
+              </div>
+            </li>
+          </ul>
+          <h4 ng-if="profileDetails.products_list.length == 0">Prekės ženklas nėra sukūręs produktų</h4>
+          <div class="clear"></div>
+        </div>
+        <div class="block1 ng-show" ng-cloak ng-show="profileExist">
+          <h3>Komentarai:</h3>
+          <div>
+            <a ng-cloak>Komentarų: {[{ commentsData.count }]}</a>
+            <div ng-hide="commentsExist" class="ng-show">
+              <a href="" ng-click="anotherCommentsPage(commentsPageNo-1)" class="btn">< Ankstesnis</a>
+              <a href="" ng-cloak ng-repeat="commentPage in commentsPageList track by $index"  ng-click="anotherCommentsPage(commentPage)" class="btn">{[{commentPage}]}</a>
+              <a href="" ng-click="anotherCommentsPage(commentsPageNo+1)" class="btn">Sekantis ></a>
+            </div>
+            </br>
+            <div ng-cloak ng-if="commentsData.count > 0">
+              <ul>
+                <li ng-repeat="comment in commentsData.results">
+                  <div class="grid_2">
+                    <img  style="width: 100px; float: left;" src="{[{ comment.author.thumbnail }]}">
+                    </br>
+                  </div>
+                  <div class="grid_5">
+                    <div ng-if="comment.author.isBrand">
+                      <a href="/profilis/{[{comment.author.pk}]}">{[{ comment.author.brandName }]}:</a>
+                    </div>
+                    <div ng-if="!comment.author.isBrand">
+                      <a href="/profilis/{[{comment.author.pk}]}">{[{ comment.author.username }]}:</a>
+                    </div>
+                    </br>
+                    {[{ comment.tagLine }]}
+                    <div ng-cloak ng-if="comment.youtube > ''"></br></br>
+                      <div ng-bind-html="getTrustedHTML(comment.youtube) | unsafe"></div>
+                    </div>
+                  </div>
+                  <div class="clear"></div>
+                </li></br></br>
+              </ul></br>
+            </div>
+            {% if user.is_authenticated %}
+            <ul>
+              <li><input ng-model="comment.youtube" style="width: 480px;" name="youtube" type="text" placeholder="youtube nuoroda"></li>
+              <li class="red">{[{ errors.youtube }]}</li>
+              <li><textarea ng-model="comment.tagLine" style="width: 480px;" rows="5" placeholder="Jūsų komentaras..">*</textarea></li>
+              <li class="red">{[{ errors.tagLine }]}</li>
+            </ul>
+            <a ng-click="addComment({{ user.pk }}, Id)" class="btn">Komentuoti</a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="block1" ng-cloak ng-if="!profileExist"></br>
+          <h4>Tokia naudotojo sąsaja neegzistuoja.</h4>
+        </div>
+      </div>
+    </div>
+    <div class="grid_3">
+      <h1><a href="{% url 'frontendApp:top15' %}"><img src="../static/images/logo.png" alt=""></a></h1>
+    </div>
+  </div>
+</div>
+{% include 'footer.html' %}
