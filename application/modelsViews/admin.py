@@ -5,12 +5,16 @@ class ingredientsAdmin(admin.ModelAdmin):
     model = ingredientsModel
     filter_horizontal = ('functions','warnings')
 
+class skinTypesAdmin(admin.ModelAdmin):
+    model = SkinTypeModel
+    filter_horizontal = ('suggested','notSuggested')
+
 admin.site.register(Brand)
 admin.site.register(ProductsModel)
 admin.site.register(CommentsModel)
 admin.site.register(RankingModel)
 admin.site.register(SuggestedReasonsConfig)
-admin.site.register(SkinTypeModel)
+admin.site.register(SkinTypeModel, skinTypesAdmin)
 
 #substances and ingredients
 admin.site.register(ingredientsModel, ingredientsAdmin)

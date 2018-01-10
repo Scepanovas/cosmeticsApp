@@ -69,11 +69,10 @@ class FunctionSerializer(serializers.ModelSerializer):
                   'description')
 
 class SuggestedReasonsConfigSerializer(serializers.ModelSerializer):
-    suggestedFunction = FunctionSerializer(many=True, read_only=True)
     class Meta:
         model = SuggestedReasonsConfig
         fields = ('pk',
-                  'suggestedFunction',
+                  'function',
                   'text')
 
 class SkinTypeSerializer(serializers.ModelSerializer):
@@ -113,7 +112,6 @@ class BrandSerializer(serializers.ModelSerializer):
         use_url=True,
         allow_empty_file=True,
     )
-    #skinType = SkinTypeSerializer()
     products_list = ProductSerializer(many=True, read_only=True)
     class Meta:
         model = Brand

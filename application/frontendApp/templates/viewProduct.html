@@ -24,14 +24,20 @@
           {% if not user.isBrand and user.isTested %}
           <div ng-hide="suggestedListEmpty && notSuggestedListEmpt">
             <h3>Rekomendacijos:</h3>
-            <h4>Rekomenduojama jums:</h4>
-            <ul ng-hide="suggestedListEmpty">
-              <li ng-repeat="suggested in suggestedList">{[{ suggested.text }]}</li>
-            </ul>
-            <h4>Nerekomenduojama jums:</h4>
-            <ul ng-hide="notSuggestedListEmpty">
-              <li ng-repeat="notSuggested in notSuggestedList">{[{ notSuggested.text }]}</li>
-            </ul>
+            <div ng-hide="suggestedListEmpty">
+              <h4>Rekomenduojama jums, nes:</h4>
+              <ul>
+                <li ng-repeat="suggested in suggestedList">{[{ suggested.text }]}</li>
+              </ul>
+              <div class="clear"></div></br>
+            </div>
+            <div ng-hide="notSuggestedListEmpty">
+              <h4>Nerekomenduojama jums, nes:</h4>
+              <ul>
+                <li ng-repeat="notSuggested in notSuggestedList">{[{ notSuggested.text }]}</li>
+              </ul>
+              <div class="clear"></div></br>
+            </div>
           </div>
           {% endif %}
           <h3>Produktas: {[{ productDetails.name }]}</h3>

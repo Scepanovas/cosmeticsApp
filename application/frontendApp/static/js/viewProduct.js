@@ -35,7 +35,9 @@ mainApp.controller('ViewProductCtrl', function($scope, $http, toaster,
     $scope.ingredientsEditMode = false;
     $scope.tagLineEditMode = false;
     $scope.customerId = customerId;
-    $scope.getUserDetails(customerId);
+    if ($scope.customerId != undefined) {
+      $scope.getUserDetails($scope.customerId);
+    };
     $scope.url = url;
     $scope.currentUrl = window.location.href;
     $scope.Id = $scope.getId($scope.currentUrl);
@@ -72,10 +74,12 @@ mainApp.controller('ViewProductCtrl', function($scope, $http, toaster,
           };
           $scope.generateFunctionsList ($scope.productDetails.ingredients);
           $scope.generateWarningsList  ($scope.productDetails.ingredients);
-          if ($scope.userDetails.skinType != null &&
-              $scope.userDetails.skinType != 0)
-          {
-            $scope.generateSuggestionList($scope.userDetails.skinType, $scope.functionsList);
+          if ($scope.userDetails != undefined){
+            if ($scope.userDetails.skinType != null &&
+                $scope.userDetails.skinType != 0)
+            {
+              $scope.generateSuggestionList($scope.userDetails.skinType, $scope.functionsList);
+            };
           };
         },
         function(data) {
@@ -84,9 +88,11 @@ mainApp.controller('ViewProductCtrl', function($scope, $http, toaster,
     };
   };
   $scope.generateSuggestionList = function(userData, productData) {
+    console.log(userData);
+    console.log(productData);
     for (var i = 0; i < userData.suggested.length; i++){
       for (var j = 0; j < productData.length; j++){
-        if (userData.suggested[i].suggestedFunction == productData[j].pk)
+        if (userData.suggested[i].function == productData[j].pk)
         {
           $scope.suggestedList.push(userData.suggested[i]);
           $scope.suggestedListEmpty = false;
@@ -95,7 +101,7 @@ mainApp.controller('ViewProductCtrl', function($scope, $http, toaster,
     };
     for (var i = 0; i < userData.notSuggested.length; i++){
       for (var j = 0; j < productData.length; j++){
-        if (userData.notSuggested[i].suggestedFunction == productData[j].pk)
+        if (userData.notSuggested[i].function == productData[j].pk)
         {
           $scope.notSuggestedList.push(userData.notSuggested[i]);
           $scope.notSuggestedListEmpty = false;

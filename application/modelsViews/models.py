@@ -78,6 +78,8 @@ class SuggestedReasonsConfig(models.Model):
                                  related_name ='suggestedFunction')
     text     = models.CharField(max_length=400)
 
+    def __str__(self):
+        return str(self.pk) + ' - ' + self.text
 
 class SkinTypeModel(models.Model):
     name         = models.CharField(max_length=128)
