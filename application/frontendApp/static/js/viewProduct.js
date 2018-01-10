@@ -88,8 +88,6 @@ mainApp.controller('ViewProductCtrl', function($scope, $http, toaster,
     };
   };
   $scope.generateSuggestionList = function(userData, productData) {
-    console.log(userData);
-    console.log(productData);
     for (var i = 0; i < userData.suggested.length; i++){
       for (var j = 0; j < productData.length; j++){
         if (userData.suggested[i].function == productData[j].pk)
